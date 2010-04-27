@@ -2,6 +2,7 @@ YARB
 ====
 
 Yet Another Rails Background job processor
+http://github.com/jkraemer/yarb
 
 This plugin is simple on purpose. It has a single threaded background process that executes the asynchronous
 jobs one job at a time.
