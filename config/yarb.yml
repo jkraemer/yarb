@@ -1,0 +1,7 @@
+# pid_file: location of the server's pid file (relative to RAILS_ROOT)
+# log_file: log file (default: RAILS_ROOT/log/yarb_server.log
+# log_level: log level for the server's logger
+
+pid_file: log/yarb_server.pid
+log_file: log/yarb_server.log
+log_level: warn

@@ -1,0 +1,54 @@
+YARB
+====
+
+Yet Another Rails Background job processor
+
+This plugin is simple on purpose. It has a single threaded background process that executes the asynchronous
+jobs one job at a time.
+
+
+Example
+=======
+
+# create the job queue table
+script/generate yarb_migration
+rake db:migrate
+
+# in your app, create a worker class like that:
+
+
+# place into lib/my_worker.rb, for example.
+class MyWorker < Yarb::Worker
+
+  # initialize the worker with the job_data that was specified upon creation of the job.
+  def create
+    @newsletter = Newsletter.find job_data[:newsletter_id]
+  end
+  
+  # halt execution if conditions aren't met (return false). Optional, default is 'always run'.
+  def precheck
+    @newsletter.should_send?
+  end
+  
+  # re-try after failed precheck every 5 minutes (optional, dont override if you want no retries)
+  def retry_interval; 5.minutes end
+  
+  # the actual work.
+  def run
+    @newsletter.subscribers.each do |subscriber|
+      NewsletterMailer.deliver_newsletter(@newsletter, subscriber)
+    end
+    logger.info "finished sending newsletter"
+  end
+
+end
+
+
+# schedule the job from within your application:
+
+Yarb.create_job NewsletterWorker, :newsletter_id => @newsletter.id
+
+Yarb.create_job NewsletterWorker, :newsletter_id => @newsletter.id, :run_at => 5.hours.from_now
+
+
+Copyright (c) 2009 Jens Krämer <jk@jkraemer.net>, released under the MIT license

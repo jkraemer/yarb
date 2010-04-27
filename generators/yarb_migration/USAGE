@@ -1,0 +1,14 @@
+Description:
+    The async_jobs migration generator creates a migration for the async_processing plugin.
+
+    The generator takes a migration name as its argument.  The migration name may be
+    given in CamelCase or under_score.  'add_async_jobs_table' is the default.
+
+    The generator creates a migration class in db/migrate prefixed by its number
+    in the queue.
+
+Example:
+    ./script/generate yarb_migration
+
+    With 4 existing migrations, this will create an AddSettingsTable migration in the
+    file db/migrate/005_add_async_jobs_table.rb
